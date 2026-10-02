@@ -1,9 +1,12 @@
+# 验证码配置
 captcha:
     height: 80
     width: 240
     length: 6
     max_skew: 0.7
     dot_count: 80
+
+# 邮箱配置
 email:
     host: smtp.qq.com
     port: 465
@@ -11,20 +14,28 @@ email:
     nickname: 发件人昵称
     secret: xxxxxxxxxxxxxxxx
     is_ssl: true
+
+# Elasticsearch配置
 es:
     url: http://127.0.0.1:9200
     username: ""
     password: ""
     is_console_print: true
+
+# 高德地图配置
 gaode:
     enable: false
     key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# JWT配置
 jwt:
     access_token_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     refresh_token_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     access_token_expiry_time: 2h
     refresh_token_expiry_time: 7d
     issuer: go_blog
+
+    # 数据库配置
 mysql:
     host: 127.0.0.1
     port: 3306
@@ -35,6 +46,8 @@ mysql:
     max_idle_conns: 10
     max_open_conns: 100
     log_mode: info
+
+    # 七牛云配置
 qiniu:
     zone: z0
     bucket: xxx
@@ -43,15 +56,21 @@ qiniu:
     secret_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     use_https: true
     use_cdn_domains: true
+
+    # QQ登录配置
 qq:
     enable: false
     app_id: "000000000"
     app_key: xxxxxxxxxxxxxxxx
     redirect_uri: http://xxx.xxx/xxx
+
+    # Redis配置
 redis:
     address: 127.0.0.1:6379
     password: ""
     db: 0
+
+    # 系统配置
 system:
     host: 0.0.0.0
     port: 8080
@@ -60,9 +79,13 @@ system:
     use_multipoint: true
     sessions_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     oss_type: local
+
+    # 上传配置
 upload:
     size: 20
     path: uploads
+
+    # 网站配置
 website:
     logo: ""
     full_logo: ""
@@ -83,6 +106,8 @@ website:
     email: xxx@qq.com
     qq_image: ""
     wechat_image: ""
+
+    # 日志配置
 zap:
     level: info
     filename: log/go_blog.log
