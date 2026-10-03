@@ -15,6 +15,7 @@ func LoadYAML() ([]byte, error) {
 	return os.ReadFile(configFile)
 }
 
+// 保存配置文件
 func SaveYAML() error {
 	byteData, err := yaml.Marshal(global.Config)
 	if err != nil {
