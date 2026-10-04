@@ -9,7 +9,7 @@ import (
 )
 
 // 把磁盘上的`config.yaml` 文件解析成内存中的`Config` 结构体·
-func InitConfig() *config.Config {
+func InitConf() *config.Config {
 	// 初始化配置结构体
 	c := &config.Config{}
 
