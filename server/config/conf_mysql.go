@@ -21,7 +21,7 @@ type Mysql struct {
 
 func (m Mysql) Dsn() string {
 	//连接数据库的链接
-	return m.Username + ":" + m.Password + "@tcp(" + m.Host + ":" + strconv.Itoa(m.Port) + ")/" + m.DBName + "?" + m.LogMode
+	return m.Username + ":" + m.Password + "@tcp(" + m.Host + ":" + strconv.Itoa(m.Port) + ")/" + m.DBName + "?" + m.Config
 }
 
 // 日志等级

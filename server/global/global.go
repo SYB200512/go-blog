@@ -11,10 +11,10 @@ import (
 )
 
 var (
-	Config      *config.Config
-	Log         *zap.Logger
-	DB          *gorm.DB
-	EsClient    *elasticsearch.TypedClient
-	RedisClient *redis.Client
-	BlackCache  local_cache.Cache
+	Config     *config.Config
+	Log        *zap.Logger
+	DB         *gorm.DB
+	EsClient   *elasticsearch.TypedClient
+	Redis      *redis.Client
+	BlackCache local_cache.Cache
 )

@@ -2,6 +2,7 @@ package main
 
 import (
 	"server/core"
+	"server/flag"
 	"server/global"
 	"server/initialize"
 )
@@ -18,7 +19,11 @@ func main() {
 	// 初始化 Elasticsearch 客户端
 	global.EsClient = initialize.ConnectES()
 	// 初始化 Redis 客户端
-	global.RedisClient = initialize.ConnectRedis()
+	global.Redis = initialize.ConnectRedis()
+
+	defer global.Redis.Close()
+	// 初始化命令行参数
+	flag.InitFlag()
 
 	core.RunServer()
 
