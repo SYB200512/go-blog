@@ -4,3 +4,5 @@
 {"level":"ERROR","time":"2026-10-05T23:05:35.431+0800","caller":"initialize/gorm.go:21","msg":"Failed to connect to mysql: %v","error":"Error 1049 (42000): Unknown database 'blog_db'"}
 {"level":"ERROR","time":"2026-10-05T23:05:37.212+0800","caller":"initialize/redis.go:27","msg":"Failed to connect to redis","error":"dial tcp 127.0.0.1:6379: connectex: No connection could be made because the target machine actively refused it."}
 {"level":"ERROR","time":"2026-10-05T23:08:38.470+0800","caller":"initialize/redis.go:27","msg":"Failed to connect to redis","error":"dial tcp 127.0.0.1:6379: connectex: No connection could be made because the target machine actively refused it."}
+{"level":"INFO","time":"2026-10-06T10:39:55.020+0800","caller":"flag/enter.go:25","msg":"Successfully initialized the MySQL database structure"}
+{"level":"INFO","time":"2026-10-06T21:25:56.552+0800","caller":"flag/enter.go:43","msg":"Successfully exported SQL data"}
