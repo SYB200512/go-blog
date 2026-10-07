@@ -25,6 +25,10 @@ func main() {
 	// 初始化命令行参数
 	flag.InitFlag()
 
+	// 初始化定时任务
+	initialize.InitCron()
+
+	// 启动服务器
 	core.RunServer()
 
 }

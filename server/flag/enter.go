@@ -23,6 +23,22 @@ var (
 		Name:  "sql-import",
 		Usage: "Imports the SQL data from a specified file.",
 	}
+	esFlag = &cli.BoolFlag{
+		Name:  "es",
+		Usage: "Initializes the Elasticsearch index.",
+	}
+	esExportFlag = &cli.BoolFlag{
+		Name:  "es-export",
+		Usage: "Exports data from Elasticsearch to a specified file.",
+	}
+	esImportFlag = &cli.StringFlag{
+		Name:  "es-import",
+		Usage: "Imports data into Elasticsearch from a specified file.",
+	}
+	adminFlag = &cli.BoolFlag{
+		Name:  "admin",
+		Usage: "Creates an administrator using the name, email and address specified in the config.yaml file.",
+	}
 )
 
 func Run(c *cli.Context) {
@@ -61,6 +77,31 @@ func Run(c *cli.Context) {
 		} else {
 			global.Log.Info("Successfully imported SQL data")
 		}
+		// 初始化 Elasticsearch 索引
+	case c.Bool(esFlag.Name):
+		if err := Elasticsearch(); err != nil {
+			global.Log.Error("Failed to create ES indices:", zap.Error(err))
+		} else {
+			global.Log.Info("Successfully created ES indices")
+		}
+	case c.Bool(esExportFlag.Name):
+		if err := ElasticsearchExport(); err != nil {
+			global.Log.Error("Failed to export ES data:", zap.Error(err))
+		} else {
+			global.Log.Info("Successfully exported ES data")
+		}
+	case c.IsSet(esImportFlag.Name):
+		if num, err := ElasticsearchImport(c.String(esImportFlag.Name)); err != nil {
+			global.Log.Error("Failed to import ES data:", zap.Error(err))
+		} else {
+			global.Log.Info(fmt.Sprintf("Successfully imported ES data, totaling %d records", num))
+		}
+	case c.Bool(adminFlag.Name):
+		if err := Admin(); err != nil {
+			global.Log.Error("Failed to create an administrator:", zap.Error(err))
+		} else {
+			global.Log.Info("Successfully created an administrator")
+		}
 	default:
 		err := cli.NewExitError("unknown command", 1)
 		global.Log.Error(err.Error(), zap.Error(err))
@@ -76,6 +117,10 @@ func NewApp() *cli.App {
 		sqlFlag,
 		sqlExportFlag,
 		sqlImportFlag,
+		esFlag,
+		esExportFlag,
+		esImportFlag,
+		adminFlag,
 	}
 	app.Action = Run
 	return app
