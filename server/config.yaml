@@ -10,9 +10,9 @@ captcha:
 email:
     host: smtp.qq.com
     port: 465
-    from: xxx@qq.com
+    from: 1247257756@qq.com
     nickname: 发件人昵称
-    secret: xxxxxxxxxxxxxxxx
+    secret: imhoftnvuwwjjfii
     is_ssl: true
 
 # Elasticsearch配置
@@ -77,7 +77,7 @@ system:
     env: release
     router_prefix: api
     use_multipoint: true
-    sessions_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    sessions_secret: VxwsdfzYWb-kwLjgcaIFHBCCwPRZHdJEA1VzxNkj_gM=
     oss_type: local
 
     # 上传配置

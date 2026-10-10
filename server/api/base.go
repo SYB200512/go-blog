@@ -1,10 +1,77 @@
 package api
 
-import "github.com/gin-gonic/gin"
+import (
+	"server/global"
+
+	"server/model/response"
+
+	"server/model/request"
+
+	"github.com/gin-gonic/gin"
+	"github.com/mojocn/base64Captcha"
+	"go.uber.org/zap"
+)
 
 type BaseApi struct {
 }
 
-func (baseApi *BaseApi) Captcha(c *gin.Context) {
+// 验证码存储
+var store = base64Captcha.DefaultMemStore
 
+// Captcha生成数字验证码
+func (baseApi *BaseApi) Captcha(c *gin.Context) {
+	//创建数字验证码的驱动
+	driver := base64Captcha.NewDriverDigit(
+		global.Config.Captcha.Height,
+		global.Config.Captcha.Width,
+		global.Config.Captcha.Length,
+		global.Config.Captcha.MaxSkew,
+		global.Config.Captcha.DotCount,
+	)
+
+	//创建验证码对象
+	captcha := base64Captcha.NewCaptcha(driver, store)
+
+	//生成验证码
+	id, b64s, _, err := captcha.Generate()
+
+	if err != nil {
+		global.Log.Error("Failed to generate captcha:", zap.Error(err))
+
+		response.FailWithMessage("Failed to generate captcha", c)
+	}
+
+	response.OkWithData(response.Captcha{
+		CaptchaID: id,
+		Picpath:   b64s,
+	}, c)
+}
+
+// SendEmailVerificationCode 发送邮箱验证码
+func (baseApi *BaseApi) SendEmailVerificationCode(c *gin.Context) {
+	var req request.SendEmailVerificationCodeReq
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	// 验证验证码
+	if store.Verify(req.CaptchaID, req.Captcha, true) {
+		err := baseService.SendEmailVerificationCode(c, req.Email)
+		if err != nil {
+			global.Log.Error("Failed to send email verification code:", zap.Error(err))
+			response.FailWithMessage("Failed to send email verification code", c)
+			return
+		}
+		response.OkWithMessage("Email verification code sent successfully", c)
+		return
+	}
+	response.FailWithMessage("Incorrect verification code", c)
+}
+
+// QQLoginURL 返回 QQ 登录链接
+func (baseApi *BaseApi) QQLoginURL(c *gin.Context) {
+	url := global.Config.QQ.QQLoginURL()
+	response.OkWithData(url, c)
 }
