@@ -24,13 +24,13 @@ es:
 
 # 高德地图配置
 gaode:
-    enable: false
-    key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    enable: true
+    key: 8ccd553ebaa1b8f12f81c2e01acfe9a6
 
 # JWT配置
 jwt:
-    access_token_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    refresh_token_secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    access_token_secret: MjvnOcsVEj_9uKfe7OPcPOYQAriWj3Z0rqiO-dOCBtA=
+    refresh_token_secret: AKsTM0bTF3hHv3czndPKLMfo5dJtL-98OkZixdBHkcs=
     access_token_expiry_time: 2h
     refresh_token_expiry_time: 7d
     issuer: go_blog

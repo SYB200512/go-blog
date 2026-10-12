@@ -4,6 +4,9 @@ package service
 type ServiceGroup struct {
 	EsService
 	BaseService
+	JwtService
+	GaodeService
+	UserService
 }
 
 // ServiceGroupApp 服务组应用实例
