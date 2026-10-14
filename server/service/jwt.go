@@ -32,7 +32,7 @@ func (jwtService *JwtService) GetRedisJWT(c *gin.Context, uuid uuid.UUID) (strin
 }
 
 // JoinInBlacklist 将JWT添加到黑名单
-func (jwtService *JwtService) JoinInBlacklist(jwtList database.JWTBlacklist) error {
+func (jwtService *JwtService) JoinInBlacklist(jwtList database.JwtBlacklist) error {
 	// 将JWT记录插入到数据库中的黑名单表
 	if err := global.DB.Create(&jwtList).Error; err != nil {
 		return err
@@ -53,7 +53,7 @@ func (jwtService *JwtService) IsInBlacklist(jwt string) bool {
 func LoadAll() {
 	var data []string
 	// 从数据库中获取所有的黑名单JWT
-	if err := global.DB.Model(&database.JWTBlacklist{}).Pluck("jwt", &data).Error; err != nil {
+	if err := global.DB.Model(&database.JwtBlacklist{}).Pluck("jwt", &data).Error; err != nil {
 		// 如果获取失败，记录错误日志
 		global.Log.Error("Failed to load JWT blacklist from the database", zap.Error(err))
 		return

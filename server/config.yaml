@@ -59,10 +59,10 @@ qiniu:
 
     # QQ登录配置
 qq:
-    enable: false
+    enable: true
     app_id: "000000000"
     app_key: xxxxxxxxxxxxxxxx
-    redirect_uri: http://xxx.xxx/xxx
+    redirect_uri: http://www.sunvyn.cn/login?flag=qq
 
     # Redis配置
 redis:

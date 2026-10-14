@@ -26,10 +26,12 @@ func InitRouter() *gin.Engine {
 
 	// 创建路由组
 	routerGroup := router.RouterGroupApp
-	// 初始化基础路由
+	// 初始化公共路由
 	publicGroup := Router.Group(global.Config.System.RouterPrefix)
+	// 初始化私有路由
 	privateGroup := Router.Group(global.Config.System.RouterPrefix)
 	privateGroup.Use(middleware.JWTAuth())
+	// 初始化管理员路由
 	adminGroup := Router.Group(global.Config.System.RouterPrefix)
 	adminGroup.Use(middleware.JWTAuth()).Use(middleware.AdminAuth())
 	{

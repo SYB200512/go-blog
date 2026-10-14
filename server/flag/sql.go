@@ -18,7 +18,7 @@ func SQL() error {
 		&database.User{},
 		&database.FriendLink{},
 		&database.Image{},
-		&database.JWTBlacklist{},
+		&database.JwtBlacklist{},
 		&database.Login{},
 	)
 }

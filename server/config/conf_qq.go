@@ -3,7 +3,7 @@ package config
 type QQ struct {
 	Enable      bool   `json:"enable" yaml:"enable"`             //是否启用QQ登录
 	AppID       string `json:"app_id" yaml:"app_id"`             //QQ应用ID
-	AppSecret   string `json:"app_secret" yaml:"app_secret"`     //QQ应用密钥
+	AppKey      string `json:"app_key" yaml:"app_key"`           //QQ应用密钥
 	RedirectURI string `json:"redirect_uri" yaml:"redirect_uri"` //QQ应用回调URL
 
 }

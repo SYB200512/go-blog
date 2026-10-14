@@ -12,7 +12,7 @@ func main() {
 	global.Config = core.InitConf()
 	// 初始化日志
 	global.Log = core.InitLogger()
-
+	// 初始化其他组件
 	initialize.OtherInit()
 	// 初始化数据库
 	global.DB = initialize.InitGorm()

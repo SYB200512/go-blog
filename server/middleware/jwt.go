@@ -59,7 +59,7 @@ func JWTAuth() gin.HandlerFunc {
 				}
 
 				// 使用Refresh Token的用户信息创建一个新的Access Token的Claims
-				newAccessClaims := j.CreateAccessTokenClaims(request.BaseClaims{
+				newAccessClaims := j.CreateAccessClaims(request.BaseClaims{
 					UserID: refreshClaims.UserID,
 					UUID:   user.UUID,
 					RoleID: user.RoleID,

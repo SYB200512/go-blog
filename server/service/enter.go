@@ -7,6 +7,7 @@ type ServiceGroup struct {
 	JwtService
 	GaodeService
 	UserService
+	QQService
 }
 
 // ServiceGroupApp 服务组应用实例

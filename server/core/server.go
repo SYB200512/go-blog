@@ -15,7 +15,9 @@ type server interface {
 
 // RunServer 用于启动服务器
 func RunServer() {
+	// 初始化服务器地址
 	addr := global.Config.System.Addr()
+	// 初始化路由
 	Router := initialize.InitRouter()
 
 	// 加载所有的 JWT 黑名单，存入本地缓存

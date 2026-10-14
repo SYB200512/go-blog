@@ -5,6 +5,8 @@ import (
 	"server/global"
 	"server/model/appTypes"
 	"server/model/database"
+	"server/model/other"
+	"server/model/request"
 	"server/utils"
 
 	"github.com/gofrs/uuid"
@@ -47,6 +49,41 @@ func (userSercice *UserService) EmailLogin(u database.User) (database.User, erro
 	return database.User{}, err
 }
 
+// QQLogin QQ登录
+func (userSercice *UserService) QQLogin(accessTokenResponse other.AccessTokenResponse) (database.User, error) {
+	var user database.User
+	err := global.DB.Where("openid = ?", accessTokenResponse.Openid).First(&user).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return database.User{}, nil
+	}
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		userInfosponse, err := ServiceGroupApp.QQService.GetUserInfoByAccessTokenAndOpenid(accessTokenResponse.AccessToken, accessTokenResponse.Openid)
+		if err != nil {
+			return database.User{}, err
+		}
+		user.UUID = uuid.Must(uuid.NewV4())
+		user.Username = userInfosponse.Nickname
+		user.Openid = accessTokenResponse.Openid
+		user.Avatar = userInfosponse.FigureurlQQ2
+		user.RoleID = appTypes.User
+		user.Register = appTypes.QQ
+		if err := global.DB.Create(&user).Error; err != nil {
+			return database.User{}, err
+		}
+	}
+	return user, err
+}
+
+// ForgotPassword 忘记密码
+func (userSercice *UserService) ForgotPassword(req request.ForgotPassword) error {
+	var user database.User
+	if err := global.DB.Where("email = ?", req.Email).First(&user).Error; err != nil {
+		return err
+	}
+	user.Password = utils.BcryptHash(req.NewPassword)
+	return global.DB.Save(&user).Error
+}
+
 func (userSercice *UserService) Logout() {
 
 }
@@ -65,9 +102,7 @@ func (userSercice *UserService) UserWeather() {
 func (userSercice *UserService) UserChart() {
 
 }
-func (userSercice *UserService) ForgotPassword() {
 
-}
 func (userSercice *UserService) UserCard() {
 
 }
