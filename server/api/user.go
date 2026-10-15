@@ -261,32 +261,124 @@ func (userApi *UserApi) ForgotPassword(c *gin.Context) {
 
 }
 
+// 用户卡片信息
+func (userApi *UserApi) UserCard(c *gin.Context) {
+	var req request.UserCard
+	err := c.ShouldBindQuery(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	userCard, err := userService.UserCard(req)
+	if err != nil {
+		global.Log.Error("Failed to retrieve user card:", zap.Error(err))
+		response.FailWithMessage("Failed to retrieve user card", c)
+		return
+	}
+	response.OkWithData(userCard, c)
+}
+
+// Logout 退出登录
 func (userApi *UserApi) Logout(c *gin.Context) {
-
+	userService.Logout(c)
+	response.OkWithMessage("Logout successfully", c)
 }
+
 func (userApi *UserApi) UserResetPassword(c *gin.Context) {
-
+	var req request.UserResetPassword
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	req.UserID = utils.GetUserID(c)
+	err = userService.UserResetPassword(req)
+	if err != nil {
+		global.Log.Error("Failed to modify:", zap.Error(err))
+		response.FailWithMessage("Failed tomodify,orginal password does not match the current password", c)
+		return
+	}
+	response.OkWithMessage("Password modified successfully,please login again", c)
+	userApi.Logout(c)
 }
+
+// 获取用户信息
 func (userApi *UserApi) UserInfo(c *gin.Context) {
-
+	userID := utils.GetUserID(c)
+	user, err := userService.UserInfo(userID)
+	if err != nil {
+		global.Log.Error("Failed to get user information:", zap.Error(err))
+		response.FailWithMessage("Failed to get user information", c)
+		return
+	}
+	response.OkWithData(user, c)
 }
-func (userApi *UserApi) UserChangeInfo(c *gin.Context) {
 
+// 修改用户信息
+func (userApi *UserApi) UserChangeInfo(c *gin.Context) {
+	var req request.UserChangeInfo
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	req.UserID = utils.GetUserID(c)
+	err = userService.UserChangeInfo(req)
+	if err != nil {
+		global.Log.Error("Failed to change user information:", zap.Error(err))
+		response.FailWithMessage("Failed to change user information", c)
+		return
+	}
+	response.OkWithMessage("User information modified successfully", c)
 }
 func (userApi *UserApi) UserWeather(c *gin.Context) {
-
+	ip := c.ClientIP()
+	weather, err := userService.UserWeather(c, ip)
+	if err != nil {
+		global.Log.Error("Failed to get weather:", zap.Error(err))
+		response.FailWithMessage("Failed to get weather", c)
+		return
+	}
+	response.OkWithData(weather, c)
 }
+
 func (userApi *UserApi) UserChart(c *gin.Context) {
-
+	var req request.UserChart
+	err := c.ShouldBindQuery(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	data, err := userService.UserChart(req)
+	if err != nil {
+		global.Log.Error("Failed to get user chart:", zap.Error(err))
+		response.FailWithMessage("Failed to get user chart", c)
+		return
+	}
+	response.OkWithData(data, c)
 }
 
-func (userApi *UserApi) UserCard(c *gin.Context) {
-
-}
-
+// UserList 获取用户列表
 func (userApi *UserApi) UserList(c *gin.Context) {
+	var pageInfo request.UserList
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 
+	list, total, err := userService.UserList(pageInfo)
+	if err != nil {
+		global.Log.Error("Failed to get user list:", zap.Error(err))
+		response.FailWithMessage("Failed to get user list", c)
+		return
+	}
+	response.OkWithData(response.PageResult{
+		List:  list,
+		Total: total,
+	}, c)
 }
+
 func (userApi *UserApi) UserFreeze(c *gin.Context) {
 
 }

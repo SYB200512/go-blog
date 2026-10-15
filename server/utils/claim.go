@@ -52,7 +52,8 @@ func GetAccessToken(c *gin.Context) string {
 	return token
 }
 
-// GetRefreshToken 从cookie获取Refresh Token
+// GetRefreshT
+// oken 从cookie获取Refresh Token
 func GetRefreshToken(c *gin.Context) string {
 	// 尝试从cookie中获取refresh-token
 	token, _ := c.Cookie("x-refresh-token")
