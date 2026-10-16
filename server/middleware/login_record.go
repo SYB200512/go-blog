@@ -15,24 +15,25 @@ func LoginRecord() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		// 异步记录日志
+		// 在主协程中同步读取请求上下文，避免在异步协程中访问 Context 造成数据竞争
+		// （Context 在请求结束后会被 gin 回收复用，协程执行时机不确定可能读不到值）
+		var userID uint
+		if value, exists := c.Get("user_id"); exists {
+			if id, ok := value.(uint); ok {
+				userID = id
+			}
+		}
+		ip := c.ClientIP()
+		loginMethod := c.DefaultQuery("flag", "email") // 若未传递flag参数，则默认为"email"
+		userAgent := c.Request.UserAgent()
+		status := c.Writer.Status()
+
+		// 异步记录日志，协程只使用上面拷贝出来的值
 		go func() {
 			gaodeService := service.ServiceGroupApp.GaodeService
-			var userID uint
-			var address string
-			ip := c.ClientIP()
-			loginMethod := c.DefaultQuery("flag", "email") // 若未传递flag参数，则默认为"email"
-			userAgent := c.Request.UserAgent()
-
-			// 从请求上下文中获取用户ID，确保获取到的是当前请求的正确用户ID
-			if value, exists := c.Get("user_id"); exists {
-				if id, ok := value.(uint); ok {
-					userID = id
-				}
-			}
 
 			// 获取用户IP的地理位置
-			address = getAddressFromIP(ip, gaodeService)
+			address := getAddressFromIP(ip, gaodeService)
 
 			// 解析用户的浏览器、操作系统和设备信息
 			os, deviceInfo, browserInfo := parseUserAgent(userAgent)
@@ -46,7 +47,7 @@ func LoginRecord() gin.HandlerFunc {
 				OS:          os,
 				DeviceInfo:  deviceInfo,
 				BrowserInfo: browserInfo,
-				Status:      c.Writer.Status(),
+				Status:      status,
 			}
 
 			// 将登录记录存储到数据库

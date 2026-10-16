@@ -46,3 +46,12 @@ type UserList struct {
 	Register *string `json:"register" form:"register"`
 	PageInfo
 }
+
+type UserOperation struct {
+	ID uint `json:"id" binding:"required"`
+}
+
+type UserLoginList struct {
+	UUID *string `json:"uuid" form:"uuid"`
+	PageInfo
+}

@@ -212,12 +212,41 @@ func (userService *UserService) UserList(info request.UserList) (interface{}, in
 
 }
 
-func (userSercice *UserService) UserFreeze() {
-
+func (userSercice *UserService) UserFreeze(req request.UserOperation) error {
+	var user database.User
+	if err := global.DB.Take(&user, req.ID).Update("freeze", true).Error; err != nil {
+		return err
+	}
+	jwtStr, _ := ServiceGroupApp.JwtService.GetRedisJWT(user.UUID)
+	if jwtStr != "" {
+		_ = ServiceGroupApp.JwtService.JoinInBlacklist(database.JwtBlacklist{
+			Jwt: jwtStr,
+		})
+	}
+	return nil
 }
-func (userSercice *UserService) UserUnfreeze() {
-
+func (userSercice *UserService) UserUnfreeze(req request.UserOperation) error {
+	return global.DB.Take(&database.User{}, req.ID).Update("freeze", false).Error
 }
-func (userSercice *UserService) UserLoginList() {
 
+// 获取用户登录记录
+func (userSercice *UserService) UserLoginList(info request.UserLoginList) (interface{}, int64, error) {
+	db := global.DB
+
+	if info.UUID != nil {
+		var userID uint
+		if err := global.DB.Model(&database.User{}).Where("uuid = ?", info.UUID).Pluck("id", &userID).Error; err != nil {
+			return nil, 0, err
+		}
+		db.Where("user_id = ?", userID)
+
+	}
+
+	option := other.MySQLOption{
+		PageInfo: info.PageInfo,
+		Where:    db,
+		Preload:  []string{"User"},
+	}
+
+	return utils.MySQLPagination(&database.Login{}, option)
 }

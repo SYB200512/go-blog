@@ -175,9 +175,9 @@ func (userApi *UserApi) TokenNext(c *gin.Context, user database.User) {
 	}
 
 	// 检查 Redis 中是否已存在该用户的 JWT
-	if jwtStr, err := jwtService.GetRedisJWT(c, user.UUID); errors.Is(err, redis.Nil) {
+	if jwtStr, err := jwtService.GetRedisJWT(user.UUID); errors.Is(err, redis.Nil) {
 		// 不存在就设置新的
-		if err := jwtService.SetRedisJWT(c, refreshToken, user.UUID); err != nil {
+		if err := jwtService.SetRedisJWT(refreshToken, user.UUID); err != nil {
 			global.Log.Error("Failed to set login status:", zap.Error(err))
 			response.FailWithMessage("Failed to set login status", c)
 			return
@@ -206,7 +206,7 @@ func (userApi *UserApi) TokenNext(c *gin.Context, user database.User) {
 		}
 
 		// 设置新的 JWT 到 Redis
-		if err := jwtService.SetRedisJWT(c, refreshToken, user.UUID); err != nil {
+		if err := jwtService.SetRedisJWT(refreshToken, user.UUID); err != nil {
 			global.Log.Error("Failed to set login status:", zap.Error(err))
 			response.FailWithMessage("Failed to set login status", c)
 			return
@@ -379,12 +379,55 @@ func (userApi *UserApi) UserList(c *gin.Context) {
 	}, c)
 }
 
+// UserFreeze 冻结用户
 func (userApi *UserApi) UserFreeze(c *gin.Context) {
-
+	var req request.UserOperation
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = userService.UserFreeze(req)
+	if err != nil {
+		global.Log.Error("Failed to freeze user:", zap.Error(err))
+		response.FailWithMessage("Failed to freeze user", c)
+		return
+	}
+	response.OkWithMessage("User frozen successfully", c)
 }
+
 func (userApi *UserApi) UserUnfreeze(c *gin.Context) {
-
+	var req request.UserOperation
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = userService.UserUnfreeze(req)
+	if err != nil {
+		global.Log.Error("Failed to unfreeze user:", zap.Error(err))
+		response.FailWithMessage("Failed to unfreeze user", c)
+		return
+	}
+	response.OkWithMessage("User unfrozen successfully", c)
 }
-func (userApi *UserApi) UserLoginList(c *gin.Context) {
 
+// UserLoginList 获取用户登录记录
+func (userApi *UserApi) UserLoginList(c *gin.Context) {
+	var pageInfo request.UserLoginList
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, total, err := userService.UserLoginList(pageInfo)
+	if err != nil {
+		global.Log.Error("Failed to get user login list:", zap.Error(err))
+		response.FailWithMessage("Failed to get user login list", c)
+		return
+	}
+	response.OkWithData(response.PageResult{
+		List:  list,
+		Total: total,
+	}, c)
 }

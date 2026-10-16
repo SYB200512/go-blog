@@ -1,11 +1,11 @@
 package service
 
 import (
+	"context"
 	"server/global"
 	"server/model/database"
 	"server/utils"
 
-	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid"
 	"go.uber.org/zap"
 )
@@ -15,20 +15,20 @@ type JwtService struct {
 }
 
 // SetRedisJWT 将JWT存储到Redis中
-func (jwtService *JwtService) SetRedisJWT(c *gin.Context, jwt string, uuid uuid.UUID) error {
+func (jwtService *JwtService) SetRedisJWT(jwt string, uuid uuid.UUID) error {
 	// 解析配置中的JWT过期时间
 	dr, err := utils.ParseDuration(global.Config.Jwt.RefreshTokenExpiryTime)
 	if err != nil {
 		return err
 	}
 	// 设置JWT在Redis中的过期时间
-	return global.Redis.Set(c, uuid.String(), jwt, dr).Err()
+	return global.Redis.Set(context.Background(), uuid.String(), jwt, 	dr).Err()
 }
 
 // GetRedisJWT 从Redis中获取JWT
-func (jwtService *JwtService) GetRedisJWT(c *gin.Context, uuid uuid.UUID) (string, error) {
+func (jwtService *JwtService) GetRedisJWT(uuid uuid.UUID) (string, error) {
 	// 从Redis获取指定uuid对应的JWT
-	return global.Redis.Get(c, uuid.String()).Result()
+	return global.Redis.Get(context.Background(), uuid.String()).Result()
 }
 
 // JoinInBlacklist 将JWT添加到黑名单
