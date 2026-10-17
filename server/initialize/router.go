@@ -34,11 +34,16 @@ func InitRouter() *gin.Engine {
 	// 初始化管理员路由
 	adminGroup := Router.Group(global.Config.System.RouterPrefix)
 	adminGroup.Use(middleware.JWTAuth()).Use(middleware.AdminAuth())
+
 	{
 		routerGroup.InitBaseRouter(publicGroup)
 	}
 	{
 		routerGroup.InitUserRouter(privateGroup, publicGroup, adminGroup)
 	}
+	{
+		routerGroup.InitImageRouter(adminGroup)
+	}
+
 	return Router
 }

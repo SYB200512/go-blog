@@ -47,7 +47,7 @@ func (baseApi *BaseApi) Captcha(c *gin.Context) {
 	}, c)
 }
 
-// SendEmailVerificationCode 发送邮箱验证码
+// SendEmailVerificationCode 发送验证码到邮箱
 func (baseApi *BaseApi) SendEmailVerificationCode(c *gin.Context) {
 	var req request.SendEmailVerificationCodeReq
 	err := c.ShouldBindJSON(&req)

@@ -4,6 +4,7 @@ package router
 type RouterGroup struct {
 	BaseRouter
 	UserRouter
+	ImageRouter
 }
 
 // RouterGroupApp 路由组应用实例

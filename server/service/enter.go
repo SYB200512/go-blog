@@ -8,6 +8,7 @@ type ServiceGroup struct {
 	GaodeService
 	UserService
 	QQService
+	ImageService
 }
 
 // ServiceGroupApp 服务组应用实例

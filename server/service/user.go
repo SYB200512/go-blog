@@ -212,6 +212,7 @@ func (userService *UserService) UserList(info request.UserList) (interface{}, in
 
 }
 
+// UserFreeze 冻结用户
 func (userSercice *UserService) UserFreeze(req request.UserOperation) error {
 	var user database.User
 	if err := global.DB.Take(&user, req.ID).Update("freeze", true).Error; err != nil {

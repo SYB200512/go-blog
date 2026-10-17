@@ -7,6 +7,6 @@ type Qiniu struct {
 	AccessKey    string `json:"access_key" yaml:"access_key"`         //七牛云访问密钥
 	SecretKey    string `json:"secret_key" yaml:"secret_key"`         //七牛云密钥
 	UseHTTPS     bool   `json:"use_https" yaml:"use_https"`           //是否使用HTTPS协议
-	UseCdnDomain bool   `json:"use_cdn_domain" yaml:"use_cdn_domain"` //是否使用CDN域名访问
+	UseCdnDomains bool   `json:"use_cdn_domains" yaml:"use_cdn_domains"` //是否使用CDN域名访问
 
 }

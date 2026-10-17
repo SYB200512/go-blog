@@ -49,7 +49,7 @@ mysql:
 
     # 七牛云配置
 qiniu:
-    zone: z0
+    zone: ZoneHuadong
     bucket: xxx
     img_path: https://xxx.xxx/
     access_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

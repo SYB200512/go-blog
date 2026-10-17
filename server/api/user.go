@@ -35,7 +35,7 @@ func (userApi *UserApi) Register(c *gin.Context) {
 		response.FailWithMessage("This email doesn't match the email in the verification code", c)
 		return
 	}
-	saveCode := session.Get("code")
+	saveCode := session.Get("verification_code")
 	if saveCode == nil || saveCode.(string) != req.VerificationCode {
 		response.FailWithMessage("This verification code is not correct", c)
 		return
