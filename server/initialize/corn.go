@@ -31,7 +31,7 @@ func NewZapLogger() *ZapLogger {
 func InitCron() {
 	// 将 cron 包的日志记录转发到 zap 日志库中，实现统一的日志管理和记录
 	c := cron.New(cron.WithLogger(NewZapLogger()))
-	err := task.RegisterScheduleTasks(c)
+	err := task.RegisterScheduledTasks(c)
 	if err != nil {
 		global.Log.Error("Error scheduling cron job:", zap.Error(err))
 		os.Exit(1)

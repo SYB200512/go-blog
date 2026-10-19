@@ -1,6 +1,8 @@
 package elasticsearch
 
 import (
+	"server/global"
+
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types"
 )
 
@@ -24,7 +26,7 @@ type Article struct {
 
 // ArticleIndex 文章 ES 索引
 func ArticleIndex() string {
-	return "article_index"
+	return global.Config.ES.IndexPrefix + "_article_index"
 }
 
 // ArticleMapping 文章 Mapping 映射

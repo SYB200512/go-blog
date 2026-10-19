@@ -11,7 +11,7 @@ import (
 // Elasticsearch ES 索引操作
 func Elasticsearch() error {
 	esService := service.ServiceGroupApp.EsService
-
+	//检查索引是否存在
 	indexExists, err := esService.IndexExists(elasticsearch.ArticleIndex())
 	if err != nil {
 		return err

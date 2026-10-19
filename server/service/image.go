@@ -46,12 +46,13 @@ func (imageApi *ImageService) ImageDelete(req request.ImageDelete) error {
 	}
 	for _, image := range images {
 		if err := global.DB.Transaction(func(tx *gorm.DB) error {
-			//先删除本地图片
+			//创建删除文件工具：根据文件储存位置创建删除文件工具
 			oss := upload.NewOssWithStorage(image.Storage)
+			//删除数据库中的图片记录
 			if err := global.DB.Delete(&image).Error; err != nil {
 				return err
 			}
-			//删除OSS图片
+			//删除真实文件
 			return oss.DeleteImage(image.Name)
 		}); err != nil {
 			return err

@@ -9,6 +9,7 @@ type ServiceGroup struct {
 	UserService
 	QQService
 	ImageService
+	ArticleService
 }
 
 // ServiceGroupApp 服务组应用实例

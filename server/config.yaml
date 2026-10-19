@@ -21,6 +21,7 @@ es:
     username: ""
     password: ""
     is_console_print: true
+    index_prefix: go-blog
 
 # 高德地图配置
 gaode:
