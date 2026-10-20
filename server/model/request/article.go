@@ -12,3 +12,13 @@ type ArticleSearch struct {
 	Order    string `json:"order" form:"order" uri:"order" binding:"required"` //asc or desc
 	PageInfo
 }
+
+type ArticleLike struct {
+	UserID    uint   `json:"_"`
+	ArticleID string `json:"article_id" form:"article_id" binding:"required"`
+}
+
+type ArticleLikesList struct {
+	UserID uint `json:"_"`
+	PageInfo
+}
