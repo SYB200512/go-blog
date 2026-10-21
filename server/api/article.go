@@ -131,16 +131,77 @@ func (articleApi *ArticleApi) ArticleTags(c *gin.Context) {
 	response.OkWithData(tags, c)
 }
 
+// ArticleCreate 创建文章
 func (articleApi *ArticleApi) ArticleCreate(c *gin.Context) {
+	var req request.ArticleCreate
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 
+	err = articleService.ArticleCreate(req)
+	if err != nil {
+		global.Log.Error("Failed to create article:", zap.Error(err))
+		response.FailWithMessage("Failed to create article:", c)
+		return
+	}
+	response.OkWithMessage("Article created successfully", c)
 }
+
+// ArticleDelete 删除文章
 func (articleApi *ArticleApi) ArticleDelete(c *gin.Context) {
+	var req request.ArticleDelete
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 
+	err = articleService.ArticleDelete(req)
+	if err != nil {
+		global.Log.Error("Failed to delete article:", zap.Error(err))
+		response.FailWithMessage("Failed to delete article", c)
+		return
+	}
+	response.OkWithMessage("Successfully deleted article", c)
 }
+
+// ArticleUpdate 更新文章
 func (articleApi *ArticleApi) ArticleUpdate(c *gin.Context) {
+	var req request.ArticleUpdate
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 
+	err = articleService.ArticleUpdate(req)
+	if err != nil {
+		global.Log.Error("Failed to update article:", zap.Error(err))
+		response.FailWithMessage("Failed to update article", c)
+		return
+	}
+	response.OkWithMessage("Successfully updated article", c)
 }
 
+// ArticleList 获取文章列表
 func (articleApi *ArticleApi) ArticleList(c *gin.Context) {
+	var pageInfo request.ArticleList
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 
+	list, total, err := articleService.ArticleList(pageInfo)
+	if err != nil {
+		global.Log.Error("Failed to get article list:", zap.Error(err))
+		response.FailWithMessage("Failed to get article list", c)
+		return
+	}
+	response.OkWithData(response.PageResult{
+		List:  list,
+		Total: total,
+	}, c)
 }
