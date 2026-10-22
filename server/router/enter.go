@@ -6,6 +6,7 @@ type RouterGroup struct {
 	UserRouter
 	ImageRouter
 	ArticleRouter
+	CommentRouter
 }
 
 // RouterGroupApp 路由组应用实例

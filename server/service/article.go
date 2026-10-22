@@ -283,7 +283,18 @@ func (articleService *ArticleService) ArticleDelete(req request.ArticleDelete) e
 			}
 
 			//TODO同时删除该文章下的所有评论
+			//先获取该文章下的一级评论
+			comments, err := ServiceGroupApp.CommentService.CommentInfoByArticleID(request.CommentInfoByArticleID{ArticleID: id})
+			if err != nil {
+				return err
+			}
 
+			//删除一级评论和子评论
+			for _, comment := range comments {
+				if err := ServiceGroupApp.CommentService.DeleteCommentAndChildren(tx, comment.ID); err != nil {
+					return err
+				}
+			}
 		}
 
 		return articleService.Delete(req.IDs)
