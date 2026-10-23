@@ -11,6 +11,7 @@ type ServiceGroup struct {
 	ImageService
 	ArticleService
 	CommentService
+	FeedbackService
 }
 
 // ServiceGroupApp 服务组应用实例
