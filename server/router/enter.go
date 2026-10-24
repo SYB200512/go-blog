@@ -8,6 +8,9 @@ type RouterGroup struct {
 	ArticleRouter
 	CommentRouter
 	FeedbackRouter
+	AdvertisementRouter
+	FriendLinkRouter
+	WebsiteRouter
 }
 
 // RouterGroupApp 路由组应用实例

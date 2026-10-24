@@ -12,6 +12,11 @@ type ServiceGroup struct {
 	ArticleService
 	CommentService
 	FeedbackService
+	AdvertisementService
+	FriendLinkService
+	WebsiteService
+	HotSearchService
+	CalendarService
 }
 
 // ServiceGroupApp 服务组应用实例
