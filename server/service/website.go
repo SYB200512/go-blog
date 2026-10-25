@@ -5,23 +5,22 @@ import (
 	"server/model/appTypes"
 	"server/model/database"
 	"server/model/other"
+	"server/model/request"
+	"server/utils"
 )
 
 type WebsiteService struct {
 }
 
-// WebsiteCarousel 获取网站轮播图
+// WebsiteCarousel 获取轮播图
 func (websiteService *WebsiteService) WebsiteCarousel() []string {
 	var urls []string
-	//pluck：只取单个字段
-	global.DB.Model(&database.Image{}).Where("category = ?", appTypes.Carousel).Pluck("url", (&urls))
+	global.DB.Model(&database.Image{}).Where("category = ?", appTypes.Carousel).Pluck("url", &urls)
 	return urls
-
 }
 
-// WebsiteNews 获取网站新闻
+// WebsiteNews 获取新闻
 func (websiteService *WebsiteService) WebsiteNews(sourceStr string) (other.HotSearchData, error) {
-	//单独文件:hot_search.go
 	hotSearchData, err := ServiceGroupApp.HotSearchService.GetHotSearchDataBySource(sourceStr)
 	if err != nil {
 		return other.HotSearchData{}, err
@@ -38,24 +37,29 @@ func (websiteService *WebsiteService) WebsiteCalendar(dateStr string) (other.Cal
 	return calendar, nil
 }
 
-// WebsiteFooterLink 获取网站底部链接
-func (websiteService *WebsiteService) WebsiteFooterLinkfunc() {
-
+// WebsiteFooterLink 获取页底部链接
+func (websiteService *WebsiteService) WebsiteFooterLink() []database.FooterLink {
+	var footerLinks []database.FooterLink
+	global.DB.Find(&footerLinks)
+	return footerLinks
 }
 
-func (websiteService *WebsiteService) WebsiteAddCarousel() {
-
-}
-func (websiteService *WebsiteService) WebsiteCancelCarousel() {
-
+// WebsiteAddCarousel 添加轮播图
+func (websiteService *WebsiteService) WebsiteAddCarousel(req request.WebsiteCarouselOperation) error {
+	return utils.ChangeImagesCategory(global.DB, []string{req.Url}, appTypes.Carousel)
 }
 
-// WebsiteCreateFooterLink 创建底部底部链接
-func (websiteService *WebsiteService) WebsiteCreateFooterLink() {
-
+// WebsiteCancelCarousel 移除轮播图
+func (websiteService *WebsiteService) WebsiteCancelCarousel(req request.WebsiteCarouselOperation) error {
+	return utils.InitImagesCategory(global.DB, []string{req.Url})
 }
 
-// WebsiteDeleteFooterLink 删除底部底部链接
-func (websiteService *WebsiteService) WebsiteDeleteFooterLink() {
+// WebsiteCreateFooterLink 创建页脚链接
+func (websiteService *WebsiteService) WebsiteCreateFooterLink(req database.FooterLink) error {
+	return global.DB.Save(&req).Error
+}
 
+// WebsiteDeleteFooterLink 删除页脚链接
+func (websiteService *WebsiteService) WebsiteDeleteFooterLink(req database.FooterLink) error {
+	return global.DB.Delete(&req).Error
 }

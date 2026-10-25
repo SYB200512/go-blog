@@ -17,6 +17,7 @@ type ServiceGroup struct {
 	WebsiteService
 	HotSearchService
 	CalendarService
+	ConfigService
 }
 
 // ServiceGroupApp 服务组应用实例

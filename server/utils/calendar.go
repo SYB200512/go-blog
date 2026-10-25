@@ -19,6 +19,7 @@ var solarTerm = []string{
 	"立冬", "小雪", "大雪", "冬至", "小寒", "大寒",
 }
 
+// GetCalendar 获取日期的农历历信息
 func GetCalendar(dateStr string) (other.Calendar, error) {
 	resp, err := http.Get("https://www.rili.com.cn/rili/json/today/" + dateStr + ".js")
 	if err != nil {
@@ -55,6 +56,7 @@ func GetCalendar(dateStr string) (other.Calendar, error) {
 	return calendar, nil
 }
 
+// nextSolarTerm 获取下一个节气
 func nextSolarTerm(currentTerm string) string {
 	for i, term := range solarTerm {
 		if term == currentTerm {

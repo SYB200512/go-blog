@@ -11,6 +11,7 @@ type RouterGroup struct {
 	AdvertisementRouter
 	FriendLinkRouter
 	WebsiteRouter
+	ConfigRouter
 }
 
 // RouterGroupApp 路由组应用实例

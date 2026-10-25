@@ -7,8 +7,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// RegisterScheduledTasks 注册定时触发器，每小时更新一次文章浏览量到数据库
 func RegisterScheduledTasks(c *cron.Cron) error {
+	// RegisterScheduledTasks 注册定时触发器，每小时更新一次文章浏览量到数据库
 	if _, err := c.AddFunc("@hourly", func() {
 		if err := UpdateArticleViewsSyncTask(); err != nil {
 			global.Log.Error("Failed to update article views:", zap.Error(err))
